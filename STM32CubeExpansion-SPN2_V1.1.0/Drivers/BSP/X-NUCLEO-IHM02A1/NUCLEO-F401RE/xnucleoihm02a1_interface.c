@@ -402,6 +402,7 @@ void MX_ADC1_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc1.Instance = ADC1;
+	/*
   hadc1.Init.ClockPrescaler = ;
   hadc1.Init.Resolution = ;
   hadc1.Init.ScanConvMode = ;
@@ -412,13 +413,14 @@ void MX_ADC1_Init(void)
   hadc1.Init.NbrOfConversion = ;
   hadc1.Init.DMAContinuousRequests = ;
   hadc1.Init.EOCSelection = ;
+	*/
   HAL_ADC_Init(&hadc1);
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
   sConfig.Channel = ADC_CHANNEL_8;		/* Currently set to input pin PB0, adjust as needed */
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ;
+  /*sConfig.SamplingTime = ;*/
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 }

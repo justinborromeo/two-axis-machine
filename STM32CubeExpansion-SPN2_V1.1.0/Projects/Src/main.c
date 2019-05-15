@@ -117,11 +117,36 @@ int main(void)
 	
 	/*Initialize the motor parameters */
 	Motor_Param_Reg_Init();
-  
+	
+	// OUR CODE
+  GPIO_InitTypeDef GPIO_InitStruct8;
+	GPIO_InitTypeDef GPIO_InitStruct9;
+	
+	GPIO_InitStruct8.Pin = GPIO_PIN_8;
+	GPIO_InitStruct8.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	
+	GPIO_InitStruct9.Pin = GPIO_PIN_9;
+	GPIO_InitStruct9.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct9.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct9.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct8);
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct9);
+	
+	//
+	
+	
   /* Infinite loop */
   while (1)
-  {
+  { 
+		GPIO_PinState pintest = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1 - pintest);
+		
+		
+		
 #ifdef TEST_MOTOR		
 
 		/* Check if any Application Command for L6470 has been entered by USART */
