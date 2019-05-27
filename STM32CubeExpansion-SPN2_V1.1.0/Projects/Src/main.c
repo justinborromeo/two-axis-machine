@@ -136,7 +136,24 @@ int main(void)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct8);
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct9);
 	*/
-	
+
+	/**** Lab 2 ****/
+	GPIO_InitTypeDef GPIO_InitStruct8;
+	GPIO_InitTypeDef GPIO_InitStruct9;
+
+  GPIO_InitStruct8.Pin = GPIO_PIN_8;
+  GPIO_InitStruct8.Mode = GPIO_MODE_EVT_RISING;
+  GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+
+	GPIO_InitStruct9.Pin = GPIO_PIN_9;
+	GPIO_InitStruct9.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct9.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct9.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct8);
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct9);
+
   while (1)
   { 
 		/**** Lab 1 ****/
@@ -147,11 +164,15 @@ int main(void)
 		*/
 		/**** Lab 2 ****/
 		
+		GPIO_PinState pin8State = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
+
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1 - pin8State);
+		// TODO is this what it means to do to turn off the LED before the next rising edge?
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 0);
 		
-		
+/*		
 #ifdef TEST_MOTOR		
 
-		/* Check if any Application Command for L6470 has been entered by USART */
     USART_CheckAppCmd();
 		
 #else
@@ -162,6 +183,7 @@ int main(void)
 	  USART_Transmit(&huart2, num2hex(myADCVal, WORD_F));
 	  USART_Transmit(&huart2, " \n\r");
 #endif		
+*/
   }
 #endif
 }
