@@ -118,7 +118,8 @@ int main(void)
 	/*Initialize the motor parameters */
 	Motor_Param_Reg_Init();
 	
-	// OUR CODE
+	/**** Lab 1 ****/
+	/*
   GPIO_InitTypeDef GPIO_InitStruct8;
 	GPIO_InitTypeDef GPIO_InitStruct9;
 	
@@ -134,16 +135,17 @@ int main(void)
 	
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct8);
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct9);
+	*/
 	
-	//
-	
-	
-  /* Infinite loop */
   while (1)
   { 
+		/**** Lab 1 ****/
+		/*
 		GPIO_PinState pintest = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1 - pintest);
+		*/
+		/**** Lab 2 ****/
 		
 		
 		
