@@ -117,14 +117,12 @@ void EXTI15_10_IRQHandler(void)
   }
 }
 
-void EXTI4_IRQHandler(void)
+void EXTI9_5_IRQHandler(void)
 {
   if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
   {
-    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
-    // Is this reversed?
-    		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1);
-		// TODO is this what it means to do to turn off the LED before the next rising edge?
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1);
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 0);
   }
 }

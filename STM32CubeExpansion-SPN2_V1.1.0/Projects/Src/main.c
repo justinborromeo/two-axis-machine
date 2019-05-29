@@ -140,19 +140,22 @@ int main(void)
 	/**** Lab 2 ****/
 	GPIO_InitTypeDef GPIO_InitStruct8;
 	GPIO_InitTypeDef GPIO_InitStruct9;
+	
 	/* POLL */
+	/*
   GPIO_InitStruct8.Pin = GPIO_PIN_8;
   GPIO_InitStruct8.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_HIGH;
+	*/
 	
 	/* INTERRUPT */
-	/*
+	
 	GPIO_InitStruct8.Pin = GPIO_PIN_8;
   GPIO_InitStruct8.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
-  GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	*/
+  GPIO_InitStruct8.Pull = GPIO_NOPULL;
+  GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_HIGH;
+	
 	
 	GPIO_InitStruct9.Pin = GPIO_PIN_9;
 	GPIO_InitStruct9.Mode = GPIO_MODE_OUTPUT_PP;
@@ -163,10 +166,10 @@ int main(void)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct8);
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct9);
   // Lowest Priority
-	/*
-  HAL_NVIC_SetPriority((IRQn_Type)(EXTI4_IRQn), 0x0F, 0x00);
-  HAL_NVIC_EnableIRQ((IRQn_Type)(EXTI4_IRQn));
-	*/
+
+  HAL_NVIC_SetPriority((IRQn_Type)(EXTI9_5_IRQn), 0x0F, 0x00);
+  HAL_NVIC_EnableIRQ((IRQn_Type)(EXTI9_5_IRQn));
+	
 	
   while (1)
   { 
@@ -177,10 +180,10 @@ int main(void)
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1 - pintest);
 		*/
 		/**** Lab 2 ****/
-		
+		/*
 		GPIO_PinState pin8State = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, pin8State);
-
+		*/
 /*		
 #ifdef TEST_MOTOR		
 
