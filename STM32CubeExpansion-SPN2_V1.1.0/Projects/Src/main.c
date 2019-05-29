@@ -142,28 +142,32 @@ int main(void)
 	GPIO_InitTypeDef GPIO_InitStruct9;
 	/* POLL */
   GPIO_InitStruct8.Pin = GPIO_PIN_8;
-  GPIO_InitStruct8.Mode = GPIO_MODE_EVT_RISING;
+  GPIO_InitStruct8.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
-  GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_HIGH;
 	
 	/* INTERRUPT */
+	/*
 	GPIO_InitStruct8.Pin = GPIO_PIN_8;
   GPIO_InitStruct8.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-
+	*/
+	
 	GPIO_InitStruct9.Pin = GPIO_PIN_9;
 	GPIO_InitStruct9.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct9.Pull = GPIO_PULLDOWN;
-	GPIO_InitStruct9.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	GPIO_InitStruct9.Speed = GPIO_SPEED_FREQ_HIGH;
 
 
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct8);
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct9);
   // Lowest Priority
+	/*
   HAL_NVIC_SetPriority((IRQn_Type)(EXTI4_IRQn), 0x0F, 0x00);
   HAL_NVIC_EnableIRQ((IRQn_Type)(EXTI4_IRQn));
-
+	*/
+	
   while (1)
   { 
 		/**** Lab 1 ****/
@@ -175,10 +179,7 @@ int main(void)
 		/**** Lab 2 ****/
 		
 		GPIO_PinState pin8State = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
-
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1 - pin8State);
-		// TODO is this what it means to do to turn off the LED before the next rising edge?
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 0);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, pin8State);
 
 /*		
 #ifdef TEST_MOTOR		

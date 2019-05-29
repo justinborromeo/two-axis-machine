@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\STM32F401RE-Nucleo\STM32F401RE-Nucleo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\STM32F401RE-Nucleo\STM32F401RE-Nucleo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed May 29 02:07:35 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed May 29 14:46:45 2019
 <BR><P>
 <H3>Maximum Stack Usage =        224 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -982,7 +982,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IRQ
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_PB_Init
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[a1]"></a>HAL_NVIC_SetPriority</STRONG> (Thumb, 152 bytes, Stack size 40 bytes, stm32f4xx_hal_cortex.o(i.HAL_NVIC_SetPriority))
@@ -997,7 +996,6 @@ Global Symbols
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_MspInit
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_NUCLEO_GPIO_Init
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_PB_Init
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[ac]"></a>HAL_NVIC_SetPriorityGrouping</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, stm32f4xx_hal_cortex.o(i.HAL_NVIC_SetPriorityGrouping))
@@ -1869,12 +1867,10 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;L6470_Config
 </UL>
 
-<P><STRONG><a name="[88]"></a>main</STRONG> (Thumb, 154 bytes, Stack size 40 bytes, main.o(i.main))
+<P><STRONG><a name="[88]"></a>main</STRONG> (Thumb, 98 bytes, Stack size 40 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = main &rArr; Motor_Param_Reg_Init &rArr; USART_PrintAllRegisterValues &rArr; USART_PrintRegisterValues &rArr; L6470_GetParam &rArr; L6470_DaisyChainCommand &rArr; HAL_SPI_TransmitReceive &rArr; SPI_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TxWelcomeMessage
