@@ -36,6 +36,7 @@
 #include "xnucleoihm02a1_interface.h"
 #include "example_usart.h"
 #include "xnucleoihm02a1.h"
+#include "stm32f4xx.h"
 
 /**
   * @addtogroup MicrosteppingMotor_Example
@@ -122,9 +123,9 @@ void EXTI9_5_IRQHandler(void)
   if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
   {
 		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1);
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 0);
-  }
+		stopMotorVert();
+		stopMotorHoriz();
+	}
 }
 
 /**

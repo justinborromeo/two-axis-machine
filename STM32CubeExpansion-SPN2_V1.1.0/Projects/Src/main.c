@@ -36,6 +36,7 @@
 #include "example_usart.h"
 #include "stm32f4xx_hal_adc.h"
 #include "params.h"
+#include "stm32f4xx_it.h"
 
 #define TEST_MOTOR	//!< Comment out this line to test the ADC
 
@@ -89,6 +90,21 @@ __IO uint16_t uhADCxConvertedValue = 0;
 static void Error_Handler(void);
 uint16_t Read_ADC(void);
 
+
+
+
+StepperMotorBoardHandle_t *StepperMotorBoardHandle;
+	
+void stopMotorHoriz () {
+	StepperMotorBoardHandle->Command->HardStop(EXPBRD_ID(0), L6470_ID(0));
+	//HAL_Delay(3000);
+}
+
+void stopMotorVert () {
+	StepperMotorBoardHandle->Command->HardStop(EXPBRD_ID(1), L6470_ID(1));
+	//HAL_Delay(3000);
+}
+	
 /**
   * @brief The FW main module
   */
@@ -146,7 +162,7 @@ int main(void)
 	/*
   GPIO_InitStruct8.Pin = GPIO_PIN_8;
   GPIO_InitStruct8.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct8.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct8.Pull = GPIO_PULLDOWN; // PULLDOWN if 3.3 -> data, PULLUP if data -> ground
   GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_HIGH;
 	*/
 	
@@ -156,7 +172,6 @@ int main(void)
   GPIO_InitStruct8.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct8.Pull = GPIO_NOPULL;
   GPIO_InitStruct8.Speed = GPIO_SPEED_FREQ_HIGH;
-	
 	
 	GPIO_InitStruct9.Pin = GPIO_PIN_9;
 	GPIO_InitStruct9.Mode = GPIO_MODE_OUTPUT_PP;
@@ -177,19 +192,17 @@ int main(void)
 	#define DELAY_2   2500		//!< Delay time 2nd option
 	#define DELAY_3   10000   //!< Delay time 3rd option
 		
-	uint32_t Step;
-  uint32_t Speed;
-  uint8_t MovementPerRevolution;
-  uint8_t i;
-  uint8_t board, device;
-  
-  uint8_t id;
-  
-  StepperMotorBoardHandle_t *StepperMotorBoardHandle;
-  MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle;
-	
 	/* Setup each X-NUCLEO-IHM02A1 Expansion Board ******************************/
   
+	
+	uint32_t Step;
+	uint32_t Speed;
+	uint8_t MovementPerRevolution;
+	uint8_t i;
+	uint8_t id;
+	uint8_t board, device;
+
+	MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle;
   /* Get the parameters for the motor connected with the 1st stepper motor driver of the 1st stepper motor expansion board */
   MotorParameterDataGlobal = GetMotorParameterInitData();
   
@@ -232,8 +245,8 @@ int main(void)
 			for (i=0; i<MovementPerRevolution; i++)
 			{
 				StepperMotorBoardHandle->Command->Run(board, device, L6470_DIR_FWD_ID, Step);
-				HAL_Delay(4000);
-				StepperMotorBoardHandle->Command->HardStop(board, device);
+				//HAL_Delay(4000);
+				//StepperMotorBoardHandle->Command->HardStop(board, device);
 			}
 		}
 		
@@ -254,6 +267,7 @@ int main(void)
   }
 #endif
 }
+
 
 
 /**
