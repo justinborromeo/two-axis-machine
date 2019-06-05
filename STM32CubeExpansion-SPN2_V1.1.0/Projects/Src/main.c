@@ -35,6 +35,7 @@
 #include "example.h"
 #include "example_usart.h"
 #include "stm32f4xx_hal_adc.h"
+#include "params.h"
 
 #define TEST_MOTOR	//!< Comment out this line to test the ADC
 
@@ -170,7 +171,38 @@ int main(void)
   HAL_NVIC_SetPriority((IRQn_Type)(EXTI9_5_IRQn), 0x0F, 0x00);
   HAL_NVIC_EnableIRQ((IRQn_Type)(EXTI9_5_IRQn));
 	
+	#define MPR_1     4			  //!< Motor Movements Per Revolution 1st option
+	#define MPR_2     8			  //!< Motor Movements Per Revolution 2nd option
+	#define DELAY_1   1000		//!< Delay time 1st option
+	#define DELAY_2   2500		//!< Delay time 2nd option
+	#define DELAY_3   10000   //!< Delay time 3rd option
+		
+	uint32_t Step;
+  uint32_t Speed;
+  uint8_t MovementPerRevolution;
+  uint8_t i;
+  uint8_t board, device;
+  
+  uint8_t id;
+  
+  StepperMotorBoardHandle_t *StepperMotorBoardHandle;
+  MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle;
 	
+	/* Setup each X-NUCLEO-IHM02A1 Expansion Board ******************************/
+  
+  /* Get the parameters for the motor connected with the 1st stepper motor driver of the 1st stepper motor expansion board */
+  MotorParameterDataGlobal = GetMotorParameterInitData();
+  
+  for (id = 0; id < EXPBRD_MOUNTED_NR; id++)
+  {
+    StepperMotorBoardHandle = BSP_GetExpansionBoardHandle(EXPBRD_ID(id));
+    MotorParameterDataSingle = MotorParameterDataGlobal+(id*L6470DAISYCHAINSIZE);
+    StepperMotorBoardHandle->Config(MotorParameterDataSingle);
+  }
+  
+  /****************************************************************************/
+  
+		
   while (1)
   { 
 		/**** Lab 1 ****/
@@ -184,6 +216,29 @@ int main(void)
 		GPIO_PinState pin8State = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, pin8State);
 		*/
+
+
+  MovementPerRevolution = MPR_1;
+	
+  for (board = EXPBRD_ID(0); board <= EXPBRD_ID(EXPBRD_MOUNTED_NR-1); board++)
+  {
+    StepperMotorBoardHandle = BSP_GetExpansionBoardHandle(board);
+    
+    for (device = L6470_ID(0); device <= L6470_ID(L6470DAISYCHAINSIZE-1); device++)
+    {
+      /* Get the parameters for the motor connected with the actual stepper motor driver of the actual stepper motor expansion board */
+      MotorParameterDataSingle = MotorParameterDataGlobal+((board*L6470DAISYCHAINSIZE)+device);
+      Step = ((uint32_t)MotorParameterDataSingle->fullstepsperrevolution * pow(2, MotorParameterDataSingle->step_sel)) / MovementPerRevolution;
+      
+      for (i=0; i<MovementPerRevolution; i++)
+      {
+        StepperMotorBoardHandle->Command->Move(board, device, L6470_DIR_FWD_ID, Step);
+        while(StepperMotorBoardHandle->Command->CheckStatusRegisterFlag(board, device, BUSY_ID) == 0);
+        HAL_Delay(DELAY_1);
+      }
+    }
+  }
+		
 /*		
 #ifdef TEST_MOTOR		
 
