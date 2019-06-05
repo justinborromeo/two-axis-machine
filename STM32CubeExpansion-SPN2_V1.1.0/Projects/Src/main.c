@@ -173,7 +173,7 @@ int main(void)
 	
 	#define MPR_1     4			  //!< Motor Movements Per Revolution 1st option
 	#define MPR_2     8			  //!< Motor Movements Per Revolution 2nd option
-	#define DELAY_1   1000		//!< Delay time 1st option
+	#define DELAY_1   5000		//!< Delay time 1st option
 	#define DELAY_2   2500		//!< Delay time 2nd option
 	#define DELAY_3   10000   //!< Delay time 3rd option
 		
@@ -218,26 +218,24 @@ int main(void)
 		*/
 
 
-  MovementPerRevolution = MPR_1;
+		MovementPerRevolution = MPR_1;
+		board = EXPBRD_ID(0);
 	
-  for (board = EXPBRD_ID(0); board <= EXPBRD_ID(EXPBRD_MOUNTED_NR-1); board++)
-  {
-    StepperMotorBoardHandle = BSP_GetExpansionBoardHandle(board);
-    
-    for (device = L6470_ID(0); device <= L6470_ID(L6470DAISYCHAINSIZE-1); device++)
-    {
-      /* Get the parameters for the motor connected with the actual stepper motor driver of the actual stepper motor expansion board */
-      MotorParameterDataSingle = MotorParameterDataGlobal+((board*L6470DAISYCHAINSIZE)+device);
-      Step = ((uint32_t)MotorParameterDataSingle->fullstepsperrevolution * pow(2, MotorParameterDataSingle->step_sel)) / MovementPerRevolution;
-      
-      for (i=0; i<MovementPerRevolution; i++)
-      {
-        StepperMotorBoardHandle->Command->Move(board, device, L6470_DIR_FWD_ID, Step);
-        while(StepperMotorBoardHandle->Command->CheckStatusRegisterFlag(board, device, BUSY_ID) == 0);
-        HAL_Delay(DELAY_1);
-      }
-    }
-  }
+		StepperMotorBoardHandle = BSP_GetExpansionBoardHandle(board);
+		// Iterating through each motor
+		for (device = L6470_ID(0); device <= L6470_ID(L6470DAISYCHAINSIZE-1); device++)
+		{
+			/* Get the parameters for the motor connected with the actual stepper motor driver of the actual stepper motor expansion board */
+			MotorParameterDataSingle = MotorParameterDataGlobal+((board*L6470DAISYCHAINSIZE)+device);
+			Step = ((uint32_t)MotorParameterDataSingle->fullstepsperrevolution * pow(2, MotorParameterDataSingle->step_sel)) / MovementPerRevolution;
+			
+			for (i=0; i<MovementPerRevolution; i++)
+			{
+				StepperMotorBoardHandle->Command->Run(board, device, L6470_DIR_FWD_ID, Step);
+				HAL_Delay(4000);
+				StepperMotorBoardHandle->Command->HardStop(board, device);
+			}
+		}
 		
 /*		
 #ifdef TEST_MOTOR		
