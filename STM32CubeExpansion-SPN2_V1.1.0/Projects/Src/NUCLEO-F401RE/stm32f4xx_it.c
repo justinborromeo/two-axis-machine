@@ -120,12 +120,7 @@ void EXTI15_10_IRQHandler(void)
 
 void EXTI9_5_IRQHandler(void)
 {
-  if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
-  {
-		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
-		stopMotorVert();
-		stopMotorHoriz();
-	}
+	HAL_
 }
 
 /**
