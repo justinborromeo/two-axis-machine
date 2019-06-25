@@ -38,7 +38,7 @@
 #include "xnucleoihm02a1.h"
 #include "stm32f4xx.h"
 
-/**
+147/744*17.....*
   * @addtogroup MicrosteppingMotor_Example
   * @{
   */
@@ -118,13 +118,48 @@ void EXTI15_10_IRQHandler(void)
   }
 }
 
+//Left horizontal switch
 void EXTI9_5_IRQHandler(void)
 {
   if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
   {
 		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
-		stopMotorVert();
-		stopMotorHoriz();
+		stopMotor(0);
+		setXDir(1);
+	}
+}
+
+//Right horizontal switch
+//Fix this IRQ to different IRQ line using schematic, verified by TA
+void EXTI3_IRQHandler(void)
+{
+  if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
+  {
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
+		stopMotor(0);
+		setXDir(0);
+	}
+}
+//Top vertical switch
+//Fix this IRQ to different IRQ line using schematic, verified by TA
+void EXTI4_IRQHandler(void)
+{
+  if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
+  {
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
+		stopMotor(1);
+		setYDir(0);
+	}
+}
+//Bottom vertical switch
+//Fix this IRQ to different IRQ line using schematic, verified by TA
+void TIM2_IRQHandler(void)
+{
+  if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
+  {
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
+		stopMotor(1);
+		setYDir(1);
 	}
 }
 

@@ -61,7 +61,16 @@ void EXTI1_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
 void SysTick_Handler(void);
 void USART2_IRQHandler(void);
+
 void EXTI9_5_IRQHandler(void);
+
+//Fix this IRQ to different IRQ line using schematic, verified by TA
+void EXTI9_5_IRQHandler(void);
+//Fix this IRQ to different IRQ line using schematic, verified by TA
+void EXTI9_5_IRQHandler(void);
+//Fix this IRQ to different IRQ line using schematic, verified by TA
+void EXTI9_5_IRQHandler(void);
+
 void stopMotorVert(void);
 void stopMotorHoriz(void);
 
