@@ -1,4 +1,8 @@
 #include "switches.h"
+#include "xnucleoihm02a1.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_adc.h"
+#include "stm32f4xx_hal_gpio.h"
 
 void Switch_Interrupt_Init(void) {
 	// X Max Switch Interrupt
@@ -32,7 +36,6 @@ void Switch_Interrupt_Init(void) {
 	HAL_GPIO_Init(Y_MAX_SWITCH_PORT, &YMaxSwitchInitStruct);
 	HAL_NVIC_SetPriority((IRQn_Type)(Y_MAX_SWITCH_IRQ), SWITCH_INTERRUPT_PRIORITY, SWITCH_INTERRUPT_PRIORITY);
   HAL_NVIC_EnableIRQ((IRQn_Type)(Y_MAX_SWITCH_IRQ));
-	
 	
 	// Y Min Switch Interrupt
 	GPIO_InitTypeDef YMinSwitchInitStruct;

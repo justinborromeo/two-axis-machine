@@ -567,6 +567,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\motors.c</FilePath>
             </File>
+            <File>
+              <FileName>switches.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\switches.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -5,5 +5,6 @@ enum {
 	BACKWARD = 1
 } typedef motor_direction_t;
 
-// TODO fix speed param
 void spinMotorX(uint32_t speed, motor_direction_t direction);
+
+void spinMotorY(uint32_t speed, motor_direction_t direction);

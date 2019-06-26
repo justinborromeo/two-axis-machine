@@ -1,4 +1,5 @@
 #include "stdint.h"
+#include "stm32f4xx_hal.h"
 
 #define SWITCH_INTERRUPT_PRIORITY 0x01
 

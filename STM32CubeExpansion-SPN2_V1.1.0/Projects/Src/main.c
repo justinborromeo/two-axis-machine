@@ -66,7 +66,7 @@ __IO uint16_t uhADCxConvertedValue = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 //static void SystemClock_Config(void);
-static void Error_Handler(void);
+//static void Error_Handler(void);
 uint16_t Read_ADC(void);
 void setupMotors(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
@@ -136,14 +136,13 @@ int main(void)
   * @param  None
   * @retval None
   */
-static void Error_Handler(void)
+/*static void Error_Handler(void)
 {
-  /* Turn LED2 on */
   BSP_LED_On(LED2);
   while (1)
   {
   }
-}
+}*/
 
 #ifdef USE_FULL_ASSERT
 
