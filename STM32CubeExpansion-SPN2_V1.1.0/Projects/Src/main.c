@@ -69,6 +69,7 @@ __IO uint16_t uhADCxConvertedValue = 0;
 uint16_t Read_ADC(void);
 void setup_motors(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+void usart_log(uint8_t* string);
 
 volatile reversal_needed_t xReversalNeeded = false, yReversalNeeded = false;
 StepperMotorBoardHandle_t *StepperMotorBoardHandle;
@@ -89,18 +90,28 @@ void setup_motors(void) {
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if (GPIO_Pin == X_MAX_SWITCH_PIN) {
+		usart_log((uint8_t*)"X max limit interrupt triggered\n");
 		xReversalNeeded = handle_x_max_pressed();
 	} else if (GPIO_Pin == X_MIN_SWITCH_PIN) {
+		usart_log((uint8_t*)"X min limit interrupt triggered\n");
 		xReversalNeeded = handle_x_min_pressed();
 	} else if (GPIO_Pin == Y_MAX_SWITCH_PIN) {
+		usart_log((uint8_t*)"Y max limit interrupt triggered\n");
 		yReversalNeeded = handle_y_max_pressed();
 	} else if (GPIO_Pin == Y_MIN_SWITCH_PIN) {
+		usart_log((uint8_t*)"Y min limit interrupt triggered\n");
 		yReversalNeeded = handle_y_min_pressed();
 	} else if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_13) != RESET) {
     __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_13);
     BSP_EmergencyStop();
   }
 }
+
+// Wrapper function for the messiness of USART_Transmit
+void usart_log(uint8_t* string) {
+	USART_Transmit(&huart2, string); 
+}
+
 
 int main(void)
 {
@@ -124,8 +135,9 @@ int main(void)
 		spin_motor(25, FORWARD, MotorParameterDataSingle_X, X_AXIS);
 		spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
 		if (xReversalNeeded) {
+			usart_log((uint8_t*)"X reversal triggered\n");
 			L6470_HardStop(X_AXIS);
-			HAL_Delay(1000);
+			HAL_Delay(1000); // For debugging purposes
 			motor_direction_t xDirection = get_x_direction();
 			if (xDirection == FORWARD) {
 				spin_motor(25, BACKWARD, MotorParameterDataSingle_X, X_AXIS);
@@ -134,6 +146,7 @@ int main(void)
 			}
 		} 
 		if (yReversalNeeded) {
+			usart_log((uint8_t*)"Y reversal triggered\n");
 			L6470_HardStop(Y_AXIS);
 			HAL_Delay(1000);
 			motor_direction_t yDirection = get_x_direction();
@@ -162,7 +175,6 @@ void assert_failed(uint8_t* file, uint32_t line)
   /* User can add his own implementation to report the file name and line number,
     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
-
 }
 
 #endif

@@ -24,7 +24,7 @@ void spin_motor(uint8_t speed_percentage,
 	// 67 is approximately equal to (250e-9/2^-28)
 	L6470_Run(axis, directionId, (MotorParameterDataSingle -> maxspeed) * 67 * speed_percentage / 100);
 }
-							 
+
 void stop_motor(axis_t axis) {
 	L6470_HardStop(axis);
 }
