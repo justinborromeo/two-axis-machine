@@ -74,18 +74,6 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-* @brief This function handles EXTI Line1 interrupt.
-*/
-void EXTI1_IRQHandler(void)
-{
-	if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1) != RESET)
-  {
-    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);
-		BSP_L6470_FlagEventManager();
-  }
-}
-
-/**
 * @brief This function handles EXTI Line0 interrupt.
 */
 void EXTI0_IRQHandler(void)
@@ -111,21 +99,44 @@ void USART2_IRQHandler(void)
 */
 void EXTI15_10_IRQHandler(void)
 {
-	if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_13) != RESET)
-  {
-    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_13);
-    BSP_EmergencyStop();
-  }
+	if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_15) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_15);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_14) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_14);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_13) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_13);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_12) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_12);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_11) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_11);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_10) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_10);
+	}
 }
 
 void EXTI9_5_IRQHandler(void)
 {
-  if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET)
-  {
-		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);
-		stopMotorVert();
-		stopMotorHoriz();
+	if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_9) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_9);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_8);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_7) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_7);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_6) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_6);
+	} else if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_5) != RESET) {
+		HAL_GPIO_EXTI_Callback(GPIO_PIN_5);
 	}
+}
+
+void EXTI4_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_Callback(GPIO_PIN_4);
+}
+
+void EXTI1_IRQHandler(void)
+{
+	HAL_GPIO_EXTI_Callback(GPIO_PIN_1);
 }
 
 /**
