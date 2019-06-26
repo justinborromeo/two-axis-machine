@@ -40,6 +40,7 @@
 #include "params.h"
 #include "stm32f4xx_it.h"
 #include "switches.h"
+#include "motors.h"
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
 
@@ -68,44 +69,36 @@ __IO uint16_t uhADCxConvertedValue = 0;
 //static void SystemClock_Config(void);
 //static void Error_Handler(void);
 uint16_t Read_ADC(void);
-void setupMotors(void);
+void setup_motors(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
-typedef enum {
-	MIN = 0,
-	MAX,
-	MIDDLE
-} platform_position_t;
-
-volatile platform_position_t xPosition = MIDDLE;
-volatile platform_position_t yPosition = MIDDLE;
-volatile bool xMotorReverseRequired = false;
-volatile bool yMotorReverseRequired = false;
+volatile motor_direction_t xDirection = FORWARD, yDirection = FORWARD;
+volatile reversal_needed_t xReversalNeeded = false, yReversalNeeded = false;
 StepperMotorBoardHandle_t *StepperMotorBoardHandle;
 MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle_X, *MotorParameterDataSingle_Y;
 
 // Helper function to initialize motor handles
 
-void setupMotors(void) {
+void setup_motors(void) {
 	Motor_Param_Reg_Init();
 	MotorParameterDataGlobal = GetMotorParameterInitData();
 	uint8_t id = 0;
 	StepperMotorBoardHandle = BSP_GetExpansionBoardHandle(EXPBRD_ID(id));
 	StepperMotorBoardHandle->Config(MotorParameterDataGlobal);
 	
-	MotorParameterDataSingle_X = MotorParameterDataGlobal; // TODO this might be reversed
+	MotorParameterDataSingle_X = MotorParameterDataGlobal;
 	MotorParameterDataSingle_Y = MotorParameterDataGlobal + 1;
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if (GPIO_Pin == X_MAX_SWITCH_PIN) {
-		xPosition = MAX;
+		xReversalNeeded = handle_x_max_pressed();
 	} else if (GPIO_Pin == X_MIN_SWITCH_PIN) {
-		xPosition = MIN;
+		xReversalNeeded = handle_x_min_pressed();
 	} else if (GPIO_Pin == Y_MAX_SWITCH_PIN) {
-		yPosition = MAX;
+		yReversalNeeded = handle_y_max_pressed();
 	} else if (GPIO_Pin == Y_MIN_SWITCH_PIN) {
-		yPosition = MIN;
+		yReversalNeeded = handle_y_min_pressed();
 	} else if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_13) != RESET) {
     __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_13);
     BSP_EmergencyStop();
@@ -121,28 +114,27 @@ int main(void)
   /* X-NUCLEO-IHM02A1 initialization */
   BSP_Init();
 	
-	setupMotors();
+	setup_motors();
 	#ifdef NUCLEO_USE_USART
   /* Transmit the initial message to the PC via UART */
   USART_TxWelcomeMessage();
 	
-	Switch_Interrupt_Init();
+	switch_interrupt_init();
+	
+	while (1) {
+		check_refractory_period();
+		// turn both motors on to forward
+		
+		if (xReversalNeeded) {
+			// Do motor shit here
+		} 
+		if (yReversalNeeded) {
+			// Do motor shit here
+		}
+	}
 	
 	#endif
 }
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @param  None
-  * @retval None
-  */
-/*static void Error_Handler(void)
-{
-  BSP_LED_On(LED2);
-  while (1)
-  {
-  }
-}*/
 
 #ifdef USE_FULL_ASSERT
 
