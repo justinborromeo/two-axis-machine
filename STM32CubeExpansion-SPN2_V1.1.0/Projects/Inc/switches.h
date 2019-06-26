@@ -27,6 +27,10 @@
 
 typedef bool reversal_needed_t;
 
+enum {
+	X_AXIS = 0,
+	Y_AXIS = 1
+} typedef axis_t;
 
 void switch_interrupt_init(void);
 

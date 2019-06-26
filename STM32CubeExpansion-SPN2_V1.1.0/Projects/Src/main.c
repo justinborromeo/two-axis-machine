@@ -33,13 +33,11 @@
   */
 
 #include "xnucleoihm02a1.h"
-#include "example.h"
 #include "example_usart.h"
 #include "stm32f4xx_hal_adc.h"
 #include "stm32f4xx_hal_gpio.h"
 #include "params.h"
 #include "stm32f4xx_it.h"
-#include "switches.h"
 #include "motors.h"
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
@@ -72,7 +70,6 @@ uint16_t Read_ADC(void);
 void setup_motors(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
-volatile motor_direction_t xDirection = FORWARD, yDirection = FORWARD;
 volatile reversal_needed_t xReversalNeeded = false, yReversalNeeded = false;
 StepperMotorBoardHandle_t *StepperMotorBoardHandle;
 MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle_X, *MotorParameterDataSingle_Y;
@@ -124,15 +121,29 @@ int main(void)
 	while (1) {
 		check_refractory_period();
 		// turn both motors on to forward
-		
+		spin_motor(25, FORWARD, MotorParameterDataSingle_X, X_AXIS);
+		spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
 		if (xReversalNeeded) {
-			// Do motor shit here
+			L6470_HardStop(X_AXIS);
+			HAL_Delay(1000);
+			motor_direction_t xDirection = get_x_direction();
+			if (xDirection == FORWARD) {
+				spin_motor(25, BACKWARD, MotorParameterDataSingle_X, X_AXIS);
+			} else if (xDirection == BACKWARD) {
+				spin_motor(25, FORWARD, MotorParameterDataSingle_X, X_AXIS);
+			}
 		} 
 		if (yReversalNeeded) {
-			// Do motor shit here
+			L6470_HardStop(Y_AXIS);
+			HAL_Delay(1000);
+			motor_direction_t yDirection = get_x_direction();
+			if (yDirection == FORWARD) {
+				spin_motor(25, BACKWARD, MotorParameterDataSingle_Y, Y_AXIS);
+			} else if (yDirection == BACKWARD) {
+				spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
+			}
 		}
 	}
-	
 	#endif
 }
 
