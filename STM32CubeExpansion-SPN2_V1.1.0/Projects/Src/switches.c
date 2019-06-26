@@ -10,12 +10,14 @@ volatile uint32_t lastXMinPressedTimestamp = 0,
 									lastYMinPressedTimestamp = 0,
 									lastYMaxPressedTimestamp = 0;
 
+
+// WIRE SWITCH TO GROUND
 void switch_interrupt_init(void) {
 	// X Max Switch Interrupt
 	GPIO_InitTypeDef XMaxSwitchInitStruct;
 	XMaxSwitchInitStruct.Pin = X_MAX_SWITCH_PIN;
   XMaxSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
-  XMaxSwitchInitStruct.Pull = GPIO_NOPULL;
+  XMaxSwitchInitStruct.Pull = GPIO_PULLUP;
   XMaxSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(X_MAX_SWITCH_PORT, &XMaxSwitchInitStruct);
 	
@@ -26,7 +28,7 @@ void switch_interrupt_init(void) {
 	GPIO_InitTypeDef XMinSwitchInitStruct;
 	XMinSwitchInitStruct.Pin = X_MIN_SWITCH_PIN;
 	XMinSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
-	XMinSwitchInitStruct.Pull = GPIO_NOPULL;
+	XMinSwitchInitStruct.Pull = GPIO_PULLUP;
 	XMinSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(X_MIN_SWITCH_PORT, &XMinSwitchInitStruct);
 
@@ -37,7 +39,7 @@ void switch_interrupt_init(void) {
 	GPIO_InitTypeDef YMaxSwitchInitStruct;
 	YMaxSwitchInitStruct.Pin = Y_MAX_SWITCH_PIN;
   YMaxSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
-  YMaxSwitchInitStruct.Pull = GPIO_NOPULL;
+  YMaxSwitchInitStruct.Pull = GPIO_PULLUP;
   YMaxSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(Y_MAX_SWITCH_PORT, &YMaxSwitchInitStruct);
 	HAL_NVIC_SetPriority((IRQn_Type)(Y_MAX_SWITCH_IRQ), SWITCH_INTERRUPT_PRIORITY, SWITCH_INTERRUPT_PRIORITY);
@@ -47,7 +49,7 @@ void switch_interrupt_init(void) {
 	GPIO_InitTypeDef YMinSwitchInitStruct;
 	YMinSwitchInitStruct.Pin = Y_MIN_SWITCH_PIN;
 	YMinSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
-	YMinSwitchInitStruct.Pull = GPIO_NOPULL;
+	YMinSwitchInitStruct.Pull = GPIO_PULLUP;
 	YMinSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(Y_MIN_SWITCH_PORT, &YMinSwitchInitStruct);
   HAL_NVIC_SetPriority((IRQn_Type)(Y_MIN_SWITCH_IRQ), SWITCH_INTERRUPT_PRIORITY, SWITCH_INTERRUPT_PRIORITY);
@@ -83,7 +85,7 @@ reversal_needed_t handle_y_min_pressed(void) {
 
 reversal_needed_t handle_y_max_pressed(void) {
 	if (lastYMaxPressedTimestamp == 0) {
-		// Reversal needed
+		// Reversal needed because refractory period of previous interrupt has elapsed
 		lastYMaxPressedTimestamp = HAL_GetTick();
 		return true;
 	}
