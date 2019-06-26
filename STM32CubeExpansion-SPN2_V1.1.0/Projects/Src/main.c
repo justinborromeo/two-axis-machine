@@ -74,7 +74,8 @@ void EXTI15_10_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
 void EXTI4_IRQHandler(void);
 
-volatile reversal_needed_t xReversalNeeded = false, yReversalNeeded = false;
+volatile motor_direction_t xDirection = X_RIGHT
+volatile motor_direction_t yDirection = Y_UP;
 StepperMotorBoardHandle_t *StepperMotorBoardHandle;
 MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle_X, *MotorParameterDataSingle_Y;
 
@@ -95,31 +96,53 @@ void setup_motors(void) {
 
 void EXTI9_5_IRQHandler(void)
 {
+	if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+		__HAL_GPIO_EXTI_CLEAR_IT(Y_MAX_SWITCH_PIN);
+		stop_motor(Y_AXIS);
+		yDirection = STOP;
+		return;
+	}
+	if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
+		__HAL_GPIO_EXTI_CLEAR_IT(X_MIN_SWITCH_PIN);
+		__HAL_GPIO_EXTI_CLEAR_IT(X_MAX_SWITCH_PIN);
+		stop_motor(X_AXIS);
+		xDirection = STOP;
+		return;
+	}
+	
+	
 	if (__HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
 		__HAL_GPIO_EXTI_CLEAR_IT(X_MAX_SWITCH_PIN);
-		xReversalNeeded = handle_x_max_pressed();
+		xDirection = handle_x_max_pressed() ? X_LEFT : X_RIGHT;
 	} else if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET) {
 		__HAL_GPIO_EXTI_CLEAR_IT(X_MIN_SWITCH_PIN);
-		xReversalNeeded = handle_x_min_pressed();
+		xDirection = handle_x_min_pressed() ? X_RIGHT: X_LEFT;
 	} else if (__HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
 		__HAL_GPIO_EXTI_CLEAR_IT(Y_MAX_SWITCH_PIN);
-		yReversalNeeded = handle_y_max_pressed();
+		yDirection = handle_y_max_pressed() ? Y_DOWN : Y_UP;
 	}
 	
 }
 
 void EXTI4_IRQHandler(void)
 {
-	 if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET) {
-		 	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_4);
-		yReversalNeeded = handle_y_min_pressed();
+	if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_4);
+		yDirection = STOP;
+		return;
 	}
+	
+	if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET) {
+		 __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_4);
+		 yDirection = handle_y_min_pressed() ? Y_UP : Y_DOWN;
+	}
+	
 }
 
 
 // Wrapper function for the messiness of USART_Transmit
 void usart_log(uint8_t* string) {
-	USART_Transmit(&huart2, string); 
+	USART_Transmit(&huart2, string);
 }
 
 
@@ -145,27 +168,11 @@ int main(void)
 	while (1) {
 		check_refractory_period();
 		// turn both motors on to forward
-		if (xReversalNeeded) {
-			usart_log((uint8_t*)"X reversal triggered\n");
-			//L6470_HardStop(X_AXIS);
-			motor_direction_t xDirection = get_x_direction();
-			if (xDirection == FORWARD) {
-				spin_motor(25, BACKWARD, MotorParameterDataSingle_X, X_AXIS);
-			} else if (xDirection == BACKWARD) {
-				spin_motor(25, FORWARD, MotorParameterDataSingle_X, X_AXIS);
-			}
-		}
-		if (yReversalNeeded) {
-			usart_log((uint8_t*)"Y reversal triggered\n");
-			L6470_HardStop(Y_AXIS);
-			motor_direction_t yDirection = get_y_direction();
-			if (yDirection == FORWARD) {
-				spin_motor(25, BACKWARD, MotorParameterDataSingle_Y, Y_AXIS);
-			} else if (yDirection == BACKWARD) {
-				spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
-			}
-		}
+		spin_motor(25, xDirection, MotorParameterDataSingle_X, X_AXIS);
+		spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
 	}
+	stop_motor(X_AXIS);
+	stop_motor(Y_AXIS);
 	#endif
 }
 

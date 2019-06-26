@@ -5,7 +5,6 @@
 #include "stm32f4xx_hal.h"
 #include "microstepping_motor.h"
 
-volatile motor_direction_t xDirection = FORWARD, yDirection = FORWARD;
 
 void spin_motor(uint8_t speed_percentage,
 							 motor_direction_t direction,
@@ -15,25 +14,14 @@ void spin_motor(uint8_t speed_percentage,
 	if (direction == BACKWARD) {
 		directionId = L6470_DIR_REV_ID;
 	}
-	if (axis == X_AXIS) {
-		xDirection = direction;
-	} else if (axis == Y_AXIS) {
-		yDirection = direction;
+	if (direction != STOP) {	
+		// 67 is approximately equal to (250e-9/2^-28)
+		L6470_Run(axis, directionId, (MotorParameterDataSingle -> maxspeed) * 67 * speed_percentage / 100);
+	} else {
+		stop_motor(axis);
 	}
-	
-	// 67 is approximately equal to (250e-9/2^-28)
-	L6470_Run(axis, directionId, (MotorParameterDataSingle -> maxspeed) * 67 * speed_percentage / 100);
 }
 
 void stop_motor(axis_t axis) {
 	L6470_HardStop(axis);
 }
-
-motor_direction_t get_x_direction() {
-	return xDirection;
-}
-
-motor_direction_t get_y_direction() {
-	return yDirection;
-}
-
