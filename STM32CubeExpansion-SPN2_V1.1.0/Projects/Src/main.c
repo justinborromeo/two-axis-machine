@@ -112,7 +112,6 @@ void EXTI4_IRQHandler(void)
 {
 	 if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET) {
 		 	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_4);
-		usart_log((uint8_t*)"Y min limit interrupt triggered\n");
 		yReversalNeeded = handle_y_min_pressed();
 	}
 }
@@ -144,7 +143,7 @@ int main(void)
 	usart_log((uint8_t*) "Entering loop");
 	
 	while (1) {
-		/*check_refractory_period();
+		check_refractory_period();
 		// turn both motors on to forward
 		if (xReversalNeeded) {
 			usart_log((uint8_t*)"X reversal triggered\n");
@@ -165,7 +164,7 @@ int main(void)
 			} else if (yDirection == BACKWARD) {
 				spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
 			}
-		}*/
+		}
 	}
 	#endif
 }

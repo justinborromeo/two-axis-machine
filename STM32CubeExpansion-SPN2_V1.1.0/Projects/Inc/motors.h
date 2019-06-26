@@ -6,8 +6,8 @@
 #include "switches.h"
 
 enum {
-	FORWARD = 0,
-	BACKWARD = 1
+	FORWARD = 0, // LEFT for X, DOWN for Y
+	BACKWARD = 1 // RIGHT FOR X, UP for Y
 } typedef motor_direction_t;
 
 void spin_motor(uint8_t speed_percentage,
