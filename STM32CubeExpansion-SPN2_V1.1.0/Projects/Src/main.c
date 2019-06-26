@@ -40,6 +40,7 @@
 #include "params.h"
 #include "stm32f4xx_it.h"
 #include "switches.h"
+#include "motors.h"
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
 
@@ -77,10 +78,8 @@ typedef enum {
 	MIDDLE
 } platform_position_t;
 
-volatile platform_position_t xPosition = MIDDLE;
-volatile platform_position_t yPosition = MIDDLE;
-volatile bool xMotorReverseRequired = false;
-volatile bool yMotorReverseRequired = false;
+volatile platform_position_t xPosition = MIDDLE, yPosition = MIDDLE;
+volatile motor_direction_t xDirection = FORWARD, yDirection = FORWARD;
 StepperMotorBoardHandle_t *StepperMotorBoardHandle;
 MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle_X, *MotorParameterDataSingle_Y;
 
@@ -93,7 +92,7 @@ void setupMotors(void) {
 	StepperMotorBoardHandle = BSP_GetExpansionBoardHandle(EXPBRD_ID(id));
 	StepperMotorBoardHandle->Config(MotorParameterDataGlobal);
 	
-	MotorParameterDataSingle_X = MotorParameterDataGlobal; // TODO this might be reversed
+	MotorParameterDataSingle_X = MotorParameterDataGlobal;
 	MotorParameterDataSingle_Y = MotorParameterDataGlobal + 1;
 }
 
@@ -126,23 +125,14 @@ int main(void)
   /* Transmit the initial message to the PC via UART */
   USART_TxWelcomeMessage();
 	
-	Switch_Interrupt_Init();
+	switch_interrupt_init();
+	
+	while (1) {
+		
+	}
 	
 	#endif
 }
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @param  None
-  * @retval None
-  */
-/*static void Error_Handler(void)
-{
-  BSP_LED_On(LED2);
-  while (1)
-  {
-  }
-}*/
 
 #ifdef USE_FULL_ASSERT
 
