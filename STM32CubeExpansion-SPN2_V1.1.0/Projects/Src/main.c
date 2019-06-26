@@ -104,9 +104,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		xPosition = MIN;
 	} else if (GPIO_Pin == Y_MAX_SWITCH_PIN) {
 		yPosition = MAX;
-	} else if (GPIO_PIN_0 == Y_MIN_SWITCH_PIN) {
+	} else if (GPIO_Pin == Y_MIN_SWITCH_PIN) {
 		yPosition = MIN;
-	}
+	} else if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_13) != RESET) {
+    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_13);
+    BSP_EmergencyStop();
+  }
 }
 
 int main(void)

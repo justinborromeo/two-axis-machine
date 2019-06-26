@@ -1,8 +1,25 @@
 #include "stdint.h"
 
-#define X_MAX_SWITCH_PIN GPIO_PIN_8
+#define SWITCH_INTERRUPT_PRIORITY 0x01
+
+// PA 8
+#define X_MAX_SWITCH_PIN GPIO_PIN_8 
+#define X_MAX_SWITCH_PORT GPIOA
+#define X_MAX_SWITCH_IRQ EXTI9_5_IRQn
+
+// PA 9
 #define X_MIN_SWITCH_PIN GPIO_PIN_9
-#define Y_MAX_SWITCH_PIN GPIO_PIN_1 // TODO Find correct pin
-#define Y_MIN_SWITCH_PIN GPIO_PIN_2 // TODO Find correct pin
+#define X_MIN_SWITCH_PORT GPIOA
+#define X_MIN_SWITCH_IRQ EXTI9_5_IRQn
+
+// PA 1
+#define Y_MAX_SWITCH_PIN GPIO_PIN_1
+#define Y_MAX_SWITCH_PORT GPIOA
+#define Y_MAX_SWITCH_IRQ EXTI1_IRQn
+
+// PB 4
+#define Y_MIN_SWITCH_PIN GPIO_PIN_4
+#define Y_MIN_SWITCH_PORT GPIOB
+#define Y_MIN_SWITCH_IRQ EXTI4_IRQn
 
 void Switch_Interrupt_Init(void);
