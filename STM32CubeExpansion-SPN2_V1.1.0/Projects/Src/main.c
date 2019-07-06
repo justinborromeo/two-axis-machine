@@ -136,7 +136,6 @@ void EXTI4_IRQHandler(void)
 		 __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_4);
 		 yDirection = handle_y_min_pressed() ? Y_UP : Y_DOWN;
 	}
-	
 }
 
 
@@ -168,8 +167,17 @@ int main(void)
 	while (1) {
 		check_refractory_period();
 		// turn both motors on to forward
-		spin_motor(25, xDirection, MotorParameterDataSingle_X, X_AXIS);
-		spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(25, xDirection, MotorParameterDataSingle_X, X_AXIS);
+		}
+		
+		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
+			stop_motor(X_AXIS);
+		} else {
+			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		}
 	}
 	stop_motor(X_AXIS);
 	stop_motor(Y_AXIS);
