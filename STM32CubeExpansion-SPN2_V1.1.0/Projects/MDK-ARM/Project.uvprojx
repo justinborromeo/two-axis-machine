@@ -572,6 +572,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\switches.c</FilePath>
             </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -621,6 +626,11 @@
               <FileName>motors.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Inc\motors.h</FilePath>
+            </File>
+            <File>
+              <FileName>adc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\adc.h</FilePath>
             </File>
           </Files>
         </Group>
