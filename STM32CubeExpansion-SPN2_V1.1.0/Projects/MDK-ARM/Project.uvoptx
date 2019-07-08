@@ -168,9 +168,25 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
+          <LineNumber>1280</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134218470</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\STM32F401RE_Nucleo\../../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c\1280</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
           <LineNumber>98</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220770</Address>
+          <Address>134220768</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -182,11 +198,11 @@
           <Expression>\\STM32F401RE_Nucleo\../Src/main.c\98</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>171</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134237184</Address>
+          <Address>134237680</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -484,7 +500,7 @@
 
   <Group>
     <GroupName>Drivers/BSP/Component/Common</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -504,7 +520,7 @@
 
   <Group>
     <GroupName>Drivers/BSP/STM32F4xx-Nucleo</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -536,7 +552,7 @@
 
   <Group>
     <GroupName>Drivers/BSP/X-NUCLEO-IHM02A1</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
