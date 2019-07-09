@@ -22,6 +22,8 @@ void spin_motor(uint8_t speed_percentage,
 	}
 }
 
+// Hard stop is used for infinite deceleration.  This will prevent damage to the two-axis machine
+// It is unknown what the effect of this is on the motor hardware.
 void stop_motor(axis_t axis) {
 	L6470_HardStop(axis);
 }
