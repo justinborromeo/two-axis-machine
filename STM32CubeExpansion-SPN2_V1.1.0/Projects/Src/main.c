@@ -144,6 +144,64 @@ void usart_log(uint8_t* string) {
 	USART_Transmit(&huart2, string);
 }
 
+void experimentA(uint16_t speed) {
+	spin_motor(speed, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
+	usart_log((uint8_t*) "Entering loop");
+	
+	uint32_t startTimestamp = HAL_GetTick();
+
+	while (1) {
+		check_refractory_period();
+		// turn both motors on to forward
+		if ((__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) ||
+			(__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET)) {
+			stop_motor(X_AXIS);
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(speed, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		}
+	}
+}
+
+void experimentB(uint16_t speed) {
+	spin_motor(speed, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
+	usart_log((uint8_t*) "Entering loop");
+	
+	uint32_t startTimestamp = HAL_GetTick();
+
+	while (1) {
+		check_refractory_period();
+		// turn both motors on to forward
+		if ((__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) ||
+			(__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET)) {
+			stop_motor(X_AXIS);
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(speed, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		}
+	}
+	stop_motor(Y_AXIS);
+}
+
+void b1();
+
+void b2();
+
+void b3();
+
+void b4();
+
+void b5();
+
+void c1();
+
+void c2();
+
+void c3();
+
+void c4();
+
+void c5();
 
 int main(void)
 {
@@ -160,45 +218,17 @@ int main(void)
   USART_TxWelcomeMessage();
 	
 	switch_interrupt_init();
-	spin_motor(25, FORWARD, MotorParameterDataSingle_X, X_AXIS);
-	spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
-	usart_log((uint8_t*) "Entering loop");
+
+	// Insert experiment function here:
 	
-	while (1) {
-		check_refractory_period();
-		// turn both motors on to forward
-		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
-			stop_motor(Y_AXIS);
-		} else {
-			spin_motor(25, xDirection, MotorParameterDataSingle_X, X_AXIS);
-		}
-		
-		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
-			stop_motor(X_AXIS);
-		} else {
-			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
-		}
-	}
-	stop_motor(X_AXIS);
-	stop_motor(Y_AXIS);
+	a1();
+	
 	#endif
 }
 
 #ifdef USE_FULL_ASSERT
-
-/**
-   * @brief Reports the name of the source file and the source line number
-   * where the assert_param error has occurred.
-   * @param file: pointer to the source file name
-   * @param line: assert_param error line source number
-   * @retval None
-   */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-    ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
 }
 
 #endif
@@ -214,13 +244,5 @@ uint16_t Read_ADC(void)
   
   return HAL_ADC_GetValue(&HADC);
 }
-
-/**
-  * @}
-  */ /* End of MicrosteppingMotor_Example */
-
-/**
-  * @}
-  */ /* End of MotionControl */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
