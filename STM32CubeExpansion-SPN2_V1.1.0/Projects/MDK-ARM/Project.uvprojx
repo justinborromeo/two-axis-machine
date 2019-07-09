@@ -577,6 +577,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\adc.c</FilePath>
             </File>
+            <File>
+              <FileName>motor_characterization.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\motor_characterization.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -631,6 +636,11 @@
               <FileName>adc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Inc\adc.h</FilePath>
+            </File>
+            <File>
+              <FileName>motor_characterization.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\motor_characterization.h</FilePath>
             </File>
           </Files>
         </Group>

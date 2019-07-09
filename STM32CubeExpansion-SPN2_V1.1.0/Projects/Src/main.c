@@ -178,12 +178,9 @@ int main(void)
 		} else {
 			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
 		}
-		
-		uint16_t myADCVal;
-		myADCVal = Read_ADC();
-	  USART_Transmit(&huart2, num2hex(myADCVal, WORD_F));
-	  USART_Transmit(&huart2, (uint8_t*) "\n\r");
 	}
+	stop_motor(X_AXIS);
+	stop_motor(Y_AXIS);
 	#endif
 }
 
