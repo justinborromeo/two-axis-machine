@@ -181,7 +181,6 @@ int main(void)
 		
 		uint16_t myADCVal;
 		myADCVal = Read_ADC();
-		USART_Transmit(&huart2, (uint8_t*) "ADC Read: ");
 	  USART_Transmit(&huart2, num2hex(myADCVal, WORD_F));
 	  USART_Transmit(&huart2, (uint8_t*) "\n\r");
 	}

@@ -402,9 +402,9 @@ void MX_ADC1_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc1.Instance = ADC1;
-	hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+	hadc1.Init.Resolution = ADC_RESOLUTION_12B; // 12 bits for maximum precision
 	hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
-	hadc1.Init.NbrOfConversion = 2;
+	hadc1.Init.NbrOfConversion = 2; // 1 per axis
 	/*
   hadc1.Init.ClockPrescaler = ;
 
@@ -425,7 +425,6 @@ void MX_ADC1_Init(void)
   sConfig.Rank = 1;
   /*sConfig.SamplingTime = ;*/
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-
 }
 
 /**
