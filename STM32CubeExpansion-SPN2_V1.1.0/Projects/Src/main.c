@@ -74,7 +74,7 @@ void EXTI15_10_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
 void EXTI4_IRQHandler(void);
 
-volatile motor_direction_t xDirection = X_RIGHT
+volatile motor_direction_t xDirection = X_RIGHT;
 volatile motor_direction_t yDirection = Y_UP;
 StepperMotorBoardHandle_t *StepperMotorBoardHandle;
 MotorParameterData_t *MotorParameterDataGlobal, *MotorParameterDataSingle_X, *MotorParameterDataSingle_Y;
