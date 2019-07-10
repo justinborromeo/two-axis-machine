@@ -145,7 +145,9 @@ void usart_log(uint8_t* string) {
 }
 
 void experimentA(uint16_t speed) {
-	spin_motor(speed, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
+	xDirection = STOP;
+	yDirection = BACKWARD;
+	spin_motor(speed, BACKWARD, MotorParameterDataSingle_Y, Y_AXIS);
 	usart_log((uint8_t*) "Entering loop");
 	
 	uint32_t startTimestamp = HAL_GetTick();
@@ -164,6 +166,8 @@ void experimentA(uint16_t speed) {
 }
 
 void experimentB(uint16_t speed) {
+	yDirection = FORWARD;
+	xDirection = STOP;
 	spin_motor(speed, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
 	usart_log((uint8_t*) "Entering loop");
 	
@@ -180,28 +184,112 @@ void experimentB(uint16_t speed) {
 			spin_motor(speed, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
 		}
 	}
+}
+
+void experimentC(uint16_t speed) {
+	xDirection = BACKWARD;
+	yDirection = STOP;
+	spin_motor(speed, xDirection, MotorParameterDataSingle_X, X_AXIS);
+	usart_log((uint8_t*) "Entering loop");
+	
+	uint32_t startTimestamp = HAL_GetTick();
+
+	while (1) {
+		check_refractory_period();
+		// turn both motors on to forward
+		if ((__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) ||
+			(__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET)) {
+			stop_motor(X_AXIS);
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(speed, xDirection, MotorParameterDataSingle_X, X_AXIS);
+		}
+	}
+}
+
+void stopExperimentation(bool hardstop) {
+	xDirection = BACKWARD;
+	yDirection = STOP;
+	spin_motor(100, xDirection, MotorParameterDataSingle_X, X_AXIS);
+	usart_log((uint8_t*) "Entering loop");
+	
+	uint32_t startTimestamp = HAL_GetTick();
+	// 5 Seconds
+	uint16_t duration = 5000;
+
+	while (HAL_GetTick() < startTimestamp + duration) {
+		check_refractory_period();
+		// turn both motors on to forward
+		if ((__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) ||
+			(__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET)) {
+			stop_motor(X_AXIS);
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(100, xDirection, MotorParameterDataSingle_X, X_AXIS);
+		}
+	}
+	if (hardstop) {
+		stop_motor(X_AXIS);
+	} else {
+		soft_stop_motor(X_AXIS);
+	}
+}
+
+void brownoutTest() {
+	xDirection = BACKWARD;
+	yDirection = BACKWARD;
+	spin_motor(100, xDirection, MotorParameterDataSingle_X, X_AXIS);
+	spin_motor(100, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+	usart_log((uint8_t*) "Entering loop");
+	
+	uint32_t startTimestamp = HAL_GetTick();
+	// 5 Seconds
+	uint16_t duration = 3500;
+
+	while (HAL_GetTick() < startTimestamp + duration) {
+		check_refractory_period();
+		// turn both motors on to forward
+		if ((__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) ||
+			(__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET)) {
+			stop_motor(X_AXIS);
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(100, xDirection, MotorParameterDataSingle_X, X_AXIS);
+			spin_motor(100, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		}
+	}
+	stop_motor(X_AXIS);
 	stop_motor(Y_AXIS);
 }
 
-void b1();
+void speedGreaterThanMax() {
+		xDirection = BACKWARD;
+	yDirection = STOP;
+	// Set speed to max 8-bit int
+	spin_motor(244, xDirection, MotorParameterDataSingle_X, X_AXIS);
+	usart_log((uint8_t*) "Entering loop");
+	
+	uint32_t startTimestamp = HAL_GetTick();
+	// 5 Seconds
+	uint16_t duration = 5000;
 
-void b2();
-
-void b3();
-
-void b4();
-
-void b5();
-
-void c1();
-
-void c2();
-
-void c3();
-
-void c4();
-
-void c5();
+	while (HAL_GetTick() < startTimestamp + duration) {
+		check_refractory_period();
+		// turn both motors on to forward
+		if ((__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) ||
+			(__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET)) {
+			stop_motor(X_AXIS);
+			stop_motor(Y_AXIS);
+		} else {
+			spin_motor(100, xDirection, MotorParameterDataSingle_X, X_AXIS);
+		}
+	}
+	if (hardstop) {
+		stop_motor(X_AXIS);
+	} else {
+		soft_stop_motor(X_AXIS);
+	}
+}
 
 int main(void)
 {
@@ -220,8 +308,7 @@ int main(void)
 	switch_interrupt_init();
 
 	// Insert experiment function here:
-	
-	a1();
+	experimentA(20);
 	
 	#endif
 }

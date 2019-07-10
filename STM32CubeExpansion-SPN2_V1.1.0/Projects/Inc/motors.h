@@ -22,3 +22,5 @@ void spin_motor(uint8_t speed_percentage,
 							 axis_t axis);
 
 void stop_motor(axis_t axis);
+
+void soft_stop_motor(axis_t axis);

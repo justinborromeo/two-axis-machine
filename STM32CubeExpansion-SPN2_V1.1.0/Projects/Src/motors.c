@@ -25,3 +25,7 @@ void spin_motor(uint8_t speed_percentage,
 void stop_motor(axis_t axis) {
 	L6470_HardStop(axis);
 }
+
+void soft_stop_motor(axis_t axis) {
+	L6470_SoftStop(axis);
+}
