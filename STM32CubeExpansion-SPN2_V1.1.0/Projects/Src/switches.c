@@ -95,16 +95,16 @@ reversal_needed_t handle_y_max_pressed(void) {
 // Check if the refractory period has elapsed since initial press.  If so, set the corresponding pressed timestamp to 0
 void check_refractory_period(void) {
 	uint32_t currentTimestamp = HAL_GetTick();
-	if (lastXMinPressedTimestamp != 0 && lastXMinPressedTimestamp < currentTimestamp - INTERRUPT_REFRACTORY_PERIOD_IN_MS) {
+	if (lastXMinPressedTimestamp != 0 && lastXMinPressedTimestamp + INTERRUPT_REFRACTORY_PERIOD_IN_MS < currentTimestamp) {
 		lastXMinPressedTimestamp = 0;
 	}
-	if (lastYMinPressedTimestamp != 0 && lastYMinPressedTimestamp < currentTimestamp - INTERRUPT_REFRACTORY_PERIOD_IN_MS) {
+	if (lastYMinPressedTimestamp != 0 && lastYMinPressedTimestamp + INTERRUPT_REFRACTORY_PERIOD_IN_MS < currentTimestamp) {
 		lastYMinPressedTimestamp = 0;
 	} 
-	if (lastXMaxPressedTimestamp != 0 && lastXMaxPressedTimestamp < currentTimestamp - INTERRUPT_REFRACTORY_PERIOD_IN_MS) {
+	if (lastXMaxPressedTimestamp != 0 && lastXMaxPressedTimestamp + INTERRUPT_REFRACTORY_PERIOD_IN_MS < currentTimestamp) {
 		lastXMaxPressedTimestamp = 0;
 	} 
-	if (lastYMaxPressedTimestamp != 0 && lastYMaxPressedTimestamp < currentTimestamp - INTERRUPT_REFRACTORY_PERIOD_IN_MS) {
+	if (lastYMaxPressedTimestamp != 0 && lastYMaxPressedTimestamp + INTERRUPT_REFRACTORY_PERIOD_IN_MS < currentTimestamp) {
 		lastYMaxPressedTimestamp = 0;
 	}
 }

@@ -138,12 +138,10 @@ void EXTI4_IRQHandler(void)
 	}
 }
 
-
 // Wrapper function for the messiness of USART_Transmit
 void usart_log(uint8_t* string) {
 	USART_Transmit(&huart2, string);
 }
-
 
 int main(void)
 {
@@ -179,8 +177,6 @@ int main(void)
 			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
 		}
 	}
-	stop_motor(X_AXIS);
-	stop_motor(Y_AXIS);
 	#endif
 }
 
