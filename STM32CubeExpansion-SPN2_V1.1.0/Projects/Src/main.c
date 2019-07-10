@@ -162,16 +162,17 @@ int main(void)
 	spin_motor(25, FORWARD, MotorParameterDataSingle_Y, Y_AXIS);
 	usart_log((uint8_t*) "Entering loop");
 	
-	while (1) {
+	while (1)
+	{
 		check_refractory_period();
 		// turn both motors on to forward
-		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+		if (HAL_GPIO_ReadPin(Y_MIN_SWITCH_PORT, Y_MIN_SWITCH_PIN) != RESET && HAL_GPIO_ReadPin(Y_MAX_SWITCH_PORT, Y_MAX_SWITCH_PIN) != RESET) {
 			stop_motor(Y_AXIS);
 		} else {
 			spin_motor(25, xDirection, MotorParameterDataSingle_X, X_AXIS);
 		}
 		
-		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
+		if (HAL_GPIO_ReadPin(X_MIN_SWITCH_PORT, X_MIN_SWITCH_PIN) != RESET && HAL_GPIO_ReadPin(X_MAX_SWITCH_PORT, X_MAX_SWITCH_PIN) != RESET) {
 			stop_motor(X_AXIS);
 		} else {
 			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
