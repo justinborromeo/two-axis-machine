@@ -152,7 +152,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>154</LineNumber>
+          <LineNumber>160</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -184,34 +184,18 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>171</LineNumber>
+          <LineNumber>31</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134237844</Address>
+          <Address>134238052</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Src\main.c</Filename>
+          <Filename>..\Src\motors.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\STM32F401RE_Nucleo\../Src/main.c\171</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>11</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134234166</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Src\adc.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32F401RE_Nucleo\../Src/adc.c\11</Expression>
+          <Expression>\\STM32F401RE_Nucleo\../Src/motors.c\31</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>

@@ -4,19 +4,22 @@
 #include "stdlib.h"
 #include "stm32f4xx_hal.h"
 
-uint32_t Read_ADC(void)
+PotentiometerReading_t Read_ADC(void)
 {
-	uint32_t newReads = 0, redValue = 0;
+	PotentiometerReading_t reading;
   HAL_ADC_Start(&HADC);
 	if (HAL_ADC_PollForConversion(&HADC, 100) == HAL_OK) {
-		redValue = HAL_ADC_GetValue(&HADC);
-    newReads = (redValue & 0x0000FFFF);
-  }
+		reading.xPotentiometerReading = (HAL_ADC_GetValue(&HADC) & 0x0000FFFF);
+  } else {
+		reading.xPotentiometerReading = ADC_ERROR;
+	}
 	
 	if (HAL_ADC_PollForConversion(&HADC, 100) == HAL_OK) {
-		redValue = HAL_ADC_GetValue(&HADC);
-    newReads += (redValue & 0x0000FFFF) << 16;
-  }
+		reading.yPotentiometerReading = (HAL_ADC_GetValue(&HADC) & 0x0000FFFF);
+  } else {
+		reading.xPotentiometerReading = ADC_ERROR;
+	} 
+
   HAL_ADC_Stop(&HADC);
-  return newReads;
+  return reading;
 }

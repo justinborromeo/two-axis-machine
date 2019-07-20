@@ -22,3 +22,14 @@ void spin_motor(uint8_t speed_percentage,
 							 axis_t axis);
 
 void stop_motor(axis_t axis);
+
+#define ADC_MIN 0x0000
+#define ADC_MAX 0x0FFF
+
+struct {
+	uint16_t speed_percentage;
+	motor_direction_t direction;
+} typedef motor_control_pair_t;
+
+// Assumes 12 bit precision
+motor_control_pair_t motor_speed_from_pot_reading(uint16_t potReading);

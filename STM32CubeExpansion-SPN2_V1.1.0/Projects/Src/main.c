@@ -144,6 +144,12 @@ void usart_log(uint8_t* string) {
 	USART_Transmit(&huart2, string);
 }
 
+void log_marijuana_readings(PotentiometerReading_t readings) {
+	usart_log(num2hex(readings.xPotentiometerReading, WORD_F));
+	usart_log((uint8_t*) "\t");
+	usart_log(num2hex(readings.yPotentiometerReading, WORD_F));
+	usart_log((uint8_t*) "\n\r");
+}
 
 int main(void)
 {
@@ -167,25 +173,29 @@ int main(void)
 	while (1) {
 		check_refractory_period();
 		// turn both motors on to forward
-		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+		PotentiometerReading_t marijuanaReadings = Read_ADC();
+		//log_marijuana_readings(marijuanaReadings);
+		uint16_t xSpeed = motor_speed_from_pot_reading(marijuanaReadings.xPotentiometerReading).speed_percentage;
+		uint16_t ySpeed = motor_speed_from_pot_reading(marijuanaReadings.yPotentiometerReading).speed_percentage;
+		xDirection = motor_speed_from_pot_reading(marijuanaReadings.xPotentiometerReading).direction;
+		yDirection = motor_speed_from_pot_reading(marijuanaReadings.yPotentiometerReading).direction;
+		
+		usart_log(num2hex(xSpeed, WORD_F));
+		usart_log((uint8_t*) "\t");
+		usart_log(num2hex(ySpeed, WORD_F));
+		usart_log((uint8_t*) "\n\r");
+		
+		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET || __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
 			stop_motor(Y_AXIS);
 		} else {
-			spin_motor(25, xDirection, MotorParameterDataSingle_X, X_AXIS);
+			spin_motor(ySpeed, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
 		}
 		
-		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
+		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET || __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
 			stop_motor(X_AXIS);
 		} else {
-			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+			spin_motor(xSpeed, xDirection, MotorParameterDataSingle_X, X_AXIS);
 		}
-		
-		uint32_t myADCVal;
-		myADCVal = Read_ADC();
-		
-	  usart_log(num2hex(((myADCVal & 0x0000FFFF)), WORD_F));
-		usart_log((uint8_t*) "\t");
-		usart_log(num2hex((myADCVal >> 16), WORD_F));
-	  usart_log((uint8_t*) "\n\r");
 	}
 	#endif
 }
