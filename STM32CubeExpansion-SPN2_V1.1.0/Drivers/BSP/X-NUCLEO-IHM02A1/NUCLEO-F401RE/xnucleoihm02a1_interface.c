@@ -417,7 +417,8 @@ void MX_ADC1_Init(void)
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.NbrOfConversion = 2; // 1 for x, 1 for y
-
+	hadc1.Init.EOCSelection = EOC_SINGLE_CONV;//Single conversion per channel
+	
 	HAL_ADC_Init(&hadc1);
 
 	/**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 

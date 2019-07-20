@@ -6,22 +6,17 @@
 
 uint32_t Read_ADC(void)
 {
-	uint32_t newReads = 0;
-	uint32_t redValue = 0;
+	uint32_t newReads = 0, redValue = 0;
   HAL_ADC_Start(&HADC);
-	if (HAL_ADC_PollForConversion(&HADC, 100) == HAL_OK) { //Read in X potentiometer value
+	if (HAL_ADC_PollForConversion(&HADC, 100) == HAL_OK) {
 		redValue = HAL_ADC_GetValue(&HADC);
     newReads = (redValue & 0x0000FFFF);
-  } else {
-		USART_Transmit(&huart2, (uint8_t*) "Error 1");
-	}
+  }
 	
-	if (HAL_ADC_PollForConversion(&HADC, 100) == HAL_OK) { //Read in Y potentiometer value
+	if (HAL_ADC_PollForConversion(&HADC, 100) == HAL_OK) {
 		redValue = HAL_ADC_GetValue(&HADC);
     newReads += (redValue & 0x0000FFFF) << 16;
-  } else {
-		USART_Transmit(&huart2, (uint8_t*) "Error 2");
-	}
- 
+  }
+  HAL_ADC_Stop(&HADC);
   return newReads;
 }
