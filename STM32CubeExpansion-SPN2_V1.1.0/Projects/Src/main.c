@@ -92,8 +92,8 @@ void setup_motors(void) {
 	MotorParameterDataSingle_Y = MotorParameterDataGlobal + 1;
 }
 
-/*** Interrupt Handlers ***/
-
+// Interrupt Handlers
+/*
 void EXTI9_5_IRQHandler(void)
 {
 	if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET && __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
@@ -137,7 +137,7 @@ void EXTI4_IRQHandler(void)
 		 yDirection = handle_y_min_pressed() ? Y_UP : Y_DOWN;
 	}
 }
-
+*/
 
 // Wrapper function for the messiness of USART_Transmit
 void usart_log(uint8_t* string) {
@@ -185,17 +185,28 @@ int main(void)
 		usart_log(num2hex(ySpeed, WORD_F));
 		usart_log((uint8_t*) "\n\r");
 		
-		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET || __HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
-			stop_motor(Y_AXIS);
-		} else {
-			spin_motor(ySpeed, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET) {
+			if (yDirection == Y_DOWN) {
+				yDirection = STOP;
+			}
 		}
-		
-		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET || __HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
-			stop_motor(X_AXIS);
-		} else {
-			spin_motor(xSpeed, xDirection, MotorParameterDataSingle_X, X_AXIS);
+		if (__HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+			if (yDirection == Y_UP) {
+				yDirection = STOP;
+			}
 		}
+		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET) {
+			if (xDirection == X_LEFT) {
+				xDirection = STOP;
+			}
+		}
+		if (__HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
+			if (xDirection == X_RIGHT) {
+				xDirection = STOP;
+			}
+		}
+		spin_motor(ySpeed, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
+		spin_motor(xSpeed, xDirection, MotorParameterDataSingle_X, X_AXIS);
 	}
 	#endif
 }
