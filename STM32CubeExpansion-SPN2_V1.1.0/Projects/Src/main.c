@@ -41,6 +41,7 @@
 #include "motors.h"
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
+#include "adc.h"
 
 #define MICROSTEPPING_MOTOR_EXAMPLE        //!< Uncomment to performe the standalone example
 //#define MICROSTEPPING_MOTOR_USART_EXAMPLE  //!< Uncomment to performe the USART example
@@ -66,7 +67,6 @@ __IO uint16_t uhADCxConvertedValue = 0;
 /* Private function prototypes -----------------------------------------------*/
 //static void SystemClock_Config(void);
 //static void Error_Handler(void);
-uint16_t Read_ADC(void);
 void setup_motors(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 void usart_log(uint8_t* string);
@@ -179,10 +179,13 @@ int main(void)
 			spin_motor(25, yDirection, MotorParameterDataSingle_Y, Y_AXIS);
 		}
 		
-		uint16_t myADCVal;
+		uint32_t myADCVal;
 		myADCVal = Read_ADC();
-	  USART_Transmit(&huart2, num2hex(myADCVal, WORD_F));
-	  USART_Transmit(&huart2, (uint8_t*) "\n\r");
+		
+	  usart_log(num2hex(((myADCVal & 0x0000FFFF)), WORD_F));
+		usart_log((uint8_t*) "\t");
+		usart_log(num2hex((myADCVal >> 16), WORD_F));
+	  usart_log((uint8_t*) "\n\r");
 	}
 	#endif
 }
@@ -206,17 +209,7 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 #endif
 
-/**
-  * @brief  This function return the ADC conversion result.
-  * @retval The number into the range [0, 4095] as [0, 3.3]V.
-  */
-uint16_t Read_ADC(void)
-{
-  HAL_ADC_Start(&HADC);
-  HAL_ADC_PollForConversion(&HADC, 100);
-  
-  return HAL_ADC_GetValue(&HADC);
-}
+
 
 /**
   * @}

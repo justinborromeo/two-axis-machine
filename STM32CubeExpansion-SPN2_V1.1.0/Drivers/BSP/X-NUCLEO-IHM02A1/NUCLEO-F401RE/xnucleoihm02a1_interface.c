@@ -398,29 +398,39 @@ void MX_ADC1_Init(void)
 
   /* GPIO Ports Clock Enable */
   __GPIOB_CLK_ENABLE();
+	
+	// Init PA0
+	GPIO_InitTypeDef GPIO_InitStruct; // TODO break out to header file
+	GPIO_InitStruct.Pin =  GPIO_PIN_0;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
+	// Init PB0
+	GPIO_InitStruct.Pin = GPIO_PIN_0;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   hadc1.Instance = ADC1;
 	hadc1.Init.Resolution = ADC_RESOLUTION_12B; // 12 bits for maximum precision
 	hadc1.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV8;
   hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 1; // 1 for x, 1 for y
-  HAL_ADC_Init(&hadc1);
+  hadc1.Init.NbrOfConversion = 2; // 1 for x, 1 for y
 
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
+	HAL_ADC_Init(&hadc1);
+
+	/**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+	*/
   sConfig1.Channel = ADC_CHANNEL_8;		/* Currently set to input pin PB0, adjust as needed */
   sConfig1.Rank = 1;
   sConfig1.SamplingTime = ADC_SAMPLETIME_84CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig1);
 	
-	//sConfig2.Channel = ADC_CHANNEL_11;
-	//sConfig2.Rank = 2;
-	//sConfig2.SamplingTime = ADC_SAMPLETIME_84CYCLES;
-	//HAL_ADC_ConfigChannel(&hadc1, &sConfig2);
+	sConfig2.Channel = ADC_CHANNEL_0; // Set to PA0 
+	sConfig2.Rank = 2;
+	sConfig2.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+	HAL_ADC_ConfigChannel(&hadc1, &sConfig2);
 }
 
 /**
