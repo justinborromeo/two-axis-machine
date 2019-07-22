@@ -185,22 +185,26 @@ int main(void)
 		usart_log(num2hex(ySpeed, WORD_F));
 		usart_log((uint8_t*) "\n\r");
 		
-		if (__HAL_GPIO_EXTI_GET_IT(Y_MIN_SWITCH_PIN) != RESET) {
+		if (HAL_GPIO_ReadPin(Y_MIN_SWITCH_PORT, Y_MIN_SWITCH_PIN) == 1) {
+			usart_log((uint8_t*) "Y Min Triggered");
 			if (yDirection == Y_DOWN) {
 				yDirection = STOP;
 			}
 		}
-		if (__HAL_GPIO_EXTI_GET_IT(Y_MAX_SWITCH_PIN) != RESET) {
+		if (HAL_GPIO_ReadPin(Y_MAX_SWITCH_PORT, Y_MAX_SWITCH_PIN) == 1) {
+			usart_log((uint8_t*) "Y Max Triggered");
 			if (yDirection == Y_UP) {
 				yDirection = STOP;
 			}
 		}
-		if (__HAL_GPIO_EXTI_GET_IT(X_MIN_SWITCH_PIN) != RESET) {
+		if (HAL_GPIO_ReadPin(X_MIN_SWITCH_PORT, X_MIN_SWITCH_PIN) == 1) {
+			usart_log((uint8_t*) "X Min Triggered");
 			if (xDirection == X_LEFT) {
 				xDirection = STOP;
 			}
 		}
-		if (__HAL_GPIO_EXTI_GET_IT(X_MAX_SWITCH_PIN) != RESET) {
+		if (HAL_GPIO_ReadPin(X_MAX_SWITCH_PORT, X_MAX_SWITCH_PIN) == 1) {
+			usart_log((uint8_t*) "X Max Triggered");
 			if (xDirection == X_RIGHT) {
 				xDirection = STOP;
 			}

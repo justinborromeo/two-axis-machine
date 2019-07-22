@@ -16,7 +16,7 @@ void switch_interrupt_init(void) {
 	// X Max Switch Interrupt
 	GPIO_InitTypeDef XMaxSwitchInitStruct;
 	XMaxSwitchInitStruct.Pin = X_MAX_SWITCH_PIN;
-  XMaxSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
+  XMaxSwitchInitStruct.Mode = GPIO_MODE_INPUT;
   XMaxSwitchInitStruct.Pull = GPIO_PULLUP;
   XMaxSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(X_MAX_SWITCH_PORT, &XMaxSwitchInitStruct);
@@ -27,7 +27,7 @@ void switch_interrupt_init(void) {
 	// X Min Switch Interrupt
 	GPIO_InitTypeDef XMinSwitchInitStruct;
 	XMinSwitchInitStruct.Pin = X_MIN_SWITCH_PIN;
-	XMinSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
+	XMinSwitchInitStruct.Mode = GPIO_MODE_INPUT;
 	XMinSwitchInitStruct.Pull = GPIO_PULLUP;
 	XMinSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(X_MIN_SWITCH_PORT, &XMinSwitchInitStruct);
@@ -38,7 +38,7 @@ void switch_interrupt_init(void) {
 	// Y Max Switch Interrupt
 	GPIO_InitTypeDef YMaxSwitchInitStruct;
 	YMaxSwitchInitStruct.Pin = Y_MAX_SWITCH_PIN;
-  YMaxSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
+  YMaxSwitchInitStruct.Mode = GPIO_MODE_INPUT;
   YMaxSwitchInitStruct.Pull = GPIO_PULLUP;
   YMaxSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(Y_MAX_SWITCH_PORT, &YMaxSwitchInitStruct);
@@ -48,7 +48,7 @@ void switch_interrupt_init(void) {
 	// Y Min Switch Interrupt
 	GPIO_InitTypeDef YMinSwitchInitStruct;
 	YMinSwitchInitStruct.Pin = Y_MIN_SWITCH_PIN;
-	YMinSwitchInitStruct.Mode = GPIO_MODE_IT_RISING;
+	YMinSwitchInitStruct.Mode = GPIO_MODE_INPUT;
 	YMinSwitchInitStruct.Pull = GPIO_PULLUP;
 	YMinSwitchInitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(Y_MIN_SWITCH_PORT, &YMinSwitchInitStruct);
